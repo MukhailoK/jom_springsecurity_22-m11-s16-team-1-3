@@ -40,4 +40,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .accessDeniedHandler(webAccessDeniedHandler);
     }
 
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(personDetailsService)
+                // spring security will automatically encode password on user login
+                .passwordEncoder(getPasswordEncoder());
+    }
+
+    @Bean
+    public PasswordEncoder getPasswordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
 }
