@@ -33,10 +33,16 @@
             <td th:text="${#temporals.format(todo.createdAt, 'dd.MM.yyyy HH:mm')}"/>
             <td th:text="${todo.getOwner().firstName + ' ' + todo.getOwner().lastName}"></td>
             <td>
-                <a th:href="@{|/todos/${todo.id}/update/users/${todo.owner.id}|}">Edit</a>
+                <a th:if="${todo.getOwner().getId() == authenticatedUserId}"
+                   th:href="@{|/todos/${todo.id}/update/users/${todo.owner.id}|}">Edit</a>
+                <a th:if="${todo.getOwner().getId() != authenticatedUserId}"
+                   href="#" style="color: gray">Edit</a>
             </td>
             <td>
-                <a th:href="@{|/todos/${todo.id}/delete/users/${todo.owner.id}|}">Remove</a>
+                <a th:if="${todo.getOwner().getId() == authenticatedUserId}"
+                   th:href="@{|/todos/${todo.id}/delete/users/${todo.owner.id}|}">Remove</a>
+                <a th:if="${todo.getOwner().getId() != authenticatedUserId}"
+                   href="#" style="color: gray">Remove</a>
             </td>
         </tr>
     </table>

@@ -3,9 +3,12 @@ package com.softserve.itacademy.controller;
 import com.softserve.itacademy.model.Task;
 import com.softserve.itacademy.model.ToDo;
 import com.softserve.itacademy.model.User;
+import com.softserve.itacademy.security.PersonDetails;
 import com.softserve.itacademy.service.TaskService;
 import com.softserve.itacademy.service.ToDoService;
 import com.softserve.itacademy.service.UserService;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -57,6 +60,11 @@ public class ToDoController {
         model.addAttribute("todo", todo);
         model.addAttribute("tasks", tasks);
         model.addAttribute("users", users);
+
+        // add authenticated user id
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        PersonDetails personDetails = (PersonDetails) authentication.getPrincipal();
+        model.addAttribute("authenticatedUserId", personDetails.getPerson().getId());
         return "todo-tasks";
     }
 
@@ -92,6 +100,11 @@ public class ToDoController {
         List<ToDo> todos = todoService.getByUserId(userId);
         model.addAttribute("todos", todos);
         model.addAttribute("user", userService.readById(userId));
+
+        // add authenticated user id
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        PersonDetails personDetails = (PersonDetails) authentication.getPrincipal();
+        model.addAttribute("authenticatedUserId", personDetails.getPerson().getId());
         return "todos-user";
     }
 
